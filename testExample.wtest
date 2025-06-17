@@ -1,9 +1,60 @@
-import example.pepita
+import example.*
 
 describe "group of tests for pepita" {
 
-  test "pepita has initial energy" {
-    assert.equals(100, pepita.energy())
+  const ciudad = new ExcursionCiudad(cantidadAtracciones = 4, idiomas = #{"español", "italiano"})
+  const tropical = new ExcursionCiudadTropical(cantidadAtracciones = 4, idiomas = #{"italiano"})
+  const trek = new SalidaTrekking(senderosRecorridos=100, diasDeSol = 130, idiomas = #{"español","portuguese"})
+  const gym = new ClasesGimnasia()
+  const playa = new ViajeDePlaya(idiomas = #{"español", "ingles"}, largoPlaya = 1000)
+  const playa1 = new ViajeDePlaya(idiomas = #{"español", "frances", "ingles"}, largoPlaya = 2000)
+  const roque = new SocioTranquilo(idiomasHablados = #{"ingles", "español"}, actividadesRealizadas = [playa],edad = 30, maximoDeActividades = 2)
+  
+  test "excursion a ciudad con 4 aatracciones lleva 2 dias, no lleva esfuerzo y no sirve broncearse" {
+    assert.equals(4, ciudad.cantidadAtracciones())
+    assert.equals(2, ciudad.diasActividad())
+    assert.notThat(ciudad.implicaEsfuerzo())
+    assert.notThat(ciudad.bronceo())
+  }
+
+  test "excursion tropical tiene 4 atracciones, lleva 3 dias, no implca esfuerzo y sirve para bronceo" {
+    assert.equals(4, tropical.cantidadAtracciones())
+    assert.equals(3, tropical.diasActividad())
+    assert.notThat(tropical.implicaEsfuerzo())
+    assert.that(tropical.bronceo())
+  }
+
+  test "trekking tiene 100 kilometros con 130 dias de sol, lleva 2 dias, implica esfuerzo y no sirve para bronceo" {
+    assert.equals(100, trek.senderosRecorridos())
+    assert.equals(130, trek.diasDeSol())
+    assert.equals(2, trek.diasActividad())
+    assert.that(trek.implicaEsfuerzo())
+    assert.notThat(trek.bronceo())
+  }
+
+  test "trek no es interesante" {
+    assert.notThat(trek.viajeInteresante())
+  }
+
+  test "tropical no es interesante" {
+    assert.notThat(tropical.viajeInteresante())
+  }
+
+  test "en gym se habla nomas español" {
+    assert.equals("español", gym.idioma())
+  }
+
+  test "roque hizo viajes a la playa por que adora broncearse y tuvo actividad forzosa" {
+    assert.that(roque.adoradorDelSol())
+    assert.equals([playa], roque.actividadesEsforzadas())
+  }
+
+  test "roque le atrae la playa por que lleva 4 dias" {
+    assert.that(roque.leAtrae(playa1))
+  }
+
+  test "la ciudad tropical no es interesante para roque" {
+    assert.notThat(tropical.recomendada(roque))
   }
 
 }
